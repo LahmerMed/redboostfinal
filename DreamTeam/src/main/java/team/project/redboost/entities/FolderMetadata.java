@@ -1,15 +1,13 @@
 package team.project.redboost.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties; //This is new!
 import jakarta.persistence.*;
-import team.project.redboost.entities.Category;
-import team.project.redboost.entities.FileMetadata;
-
 import java.util.ArrayList;
 import java.util.List;
 
+// FolderMetadata.java
 @Entity
 @Table(name = "folder_metadata")
 public class FolderMetadata {
@@ -24,30 +22,23 @@ public class FolderMetadata {
     @Column(name = "folder_path")
     private String folderPath;
 
-    // Relation One-to-Many avec FileMetadata
-    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference  // ADD THIS
-    private List<FileMetadata> files = new ArrayList<>();
-
-    // Relation many to one with Category
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference  // ADD THIS
+    @JsonBackReference // Mark this as the "child" side
     private Category category;
-    // NEW: Many-to-Many with Projet
-    @ManyToMany(mappedBy = "folders")
-    private List<Projet> projects = new ArrayList<>();
 
-    // Constructeurs, Getters et Setters
+    @Transient
+    private Long categoryId;
 
-    public FolderMetadata() {
-    }
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Mark this as the "parent" side
+    private List<FileMetadata> files = new ArrayList<>();
 
-    public FolderMetadata(String folderName, String folderPath) {
-        this.folderName = folderName;
-        this.folderPath = folderPath;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -72,6 +63,22 @@ public class FolderMetadata {
         this.folderPath = folderPath;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Long getCategoryId() {
+        return category != null ? category.getId() : null;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public List<FileMetadata> getFiles() {
         return files;
     }
@@ -80,12 +87,11 @@ public class FolderMetadata {
         this.files = files;
     }
 
-
-    public Category getCategory() {
-        return category;
+    public User getUser() {
+        return user;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
