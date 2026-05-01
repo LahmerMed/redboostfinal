@@ -44,8 +44,8 @@ import { CommonModule } from '@angular/common';
 
                 <!-- Hamburger Menu for Mobile -->
                 <div class="flex items-center gap-4 sm:hidden">
-                    <button pButton pRipple label="Se connecter" routerLink="/auth/login" [rounded]="true" [text]="true" class="custom-button-login transition-colors duration-300 transform hover:scale-105"></button>
-                    <button pButton pRipple label="S'inscrire" routerLink="/auth/register" [rounded]="true" [text]="false" class="custom-button-register transition-colors duration-300 transform hover:scale-105"></button>
+                    <button pButton pRipple label="Se connecter" routerLink="/signin" [rounded]="true" [text]="true" class="custom-button-login transition-colors duration-300 transform hover:scale-105"></button>
+                    <button pButton pRipple label="S'inscrire" routerLink="/signup" [rounded]="true" [text]="false" class="custom-button-register transition-colors duration-300 transform hover:scale-105"></button>
                     <button class="p-2 text-surface-900 dark:text-surface-0" (click)="toggleMenu()">
                         <i class="pi pi-bars text-2xl"></i>
                     </button>
@@ -65,8 +65,8 @@ import { CommonModule } from '@angular/common';
 
                 <!-- Login and Register Buttons (Hidden on Mobile) -->
                 <div class="hidden sm:flex gap-4">
-                    <button pButton pRipple label="Login" routerLink="/signin" [rounded]="true" [text]="true" class="custom-button-login transition-colors duration-300 transform hover:scale-105"></button>
-                    <button pButton pRipple label="Register" routerLink="/signup" [rounded]="true" [text]="false" class="custom-button-register transition-colors duration-300 transform hover:scale-105"></button>
+                    <button pButton pRipple label="Se connecter" routerLink="/signin" [rounded]="true" [text]="true" class="custom-button-login transition-colors duration-300 transform hover:scale-105"></button>
+                    <button pButton pRipple label="S'inscrire" routerLink="/signup" [rounded]="true" [text]="false" class="custom-button-register transition-colors duration-300 transform hover:scale-105"></button>
                 </div>
             </div>
 

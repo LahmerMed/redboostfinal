@@ -29,15 +29,17 @@ public class EmailService {
 
     private static final String CLIENT_ID = "717073407944-pmbmhmhpdg3jove9da1582o9ihl2itat.apps.googleusercontent.com";
     private static final String CLIENT_SECRET = "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";
-    private static final String REFRESH_TOKEN = "1//04boOw3TF2LuGCgYIARAAGAQSNwF-L9IrS1ym8Ah2ov2UeZbUxxKJg1Mjm32TdRX01XAXxNPK8WUX8o3dfp94JRk3R0nhyx1ncsM";
+    private static final String REFRESH_TOKEN = "1//04zVEiaFZSdMoCgYIARAAGAQSNwF-L9Ir6Atk0teYm-jQqoFjQv7Qt5VL29f7fBQkPXQ4zI_HgCg_3_jt7fy-wo6zHq-Su0tYY_Q";
 
     private static final String USER_EMAIL = "messaoudimarwa75@gmail.com";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     private final HttpTransport httpTransport;
+    private Credential credential;
 
     public EmailService() throws GeneralSecurityException, IOException {
         this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        this.credential = getCredentials();
     }
 
     /**
@@ -64,7 +66,7 @@ public class EmailService {
      * Création du service Gmail
      */
     private Gmail getGmailService() throws IOException {
-        return new Gmail.Builder(httpTransport, JSON_FACTORY, getCredentials())
+        return new Gmail.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName("MyApp")
                 .build();
     }
@@ -73,12 +75,27 @@ public class EmailService {
      * Envoi d'un email via Gmail API
      */
     public void sendEmail(String to, String subject, String body) throws MessagingException, IOException {
-        Gmail gmail = getGmailService();
+        try {
+            Gmail gmail = getGmailService();
 
-        MimeMessage mimeMessage = createEmail(to, USER_EMAIL, subject, body);
-        Message message = createMessageWithEmail(mimeMessage);
+            MimeMessage mimeMessage = createEmail(to, USER_EMAIL, subject, body);
+            Message message = createMessageWithEmail(mimeMessage);
 
-        gmail.users().messages().send(USER_EMAIL, message).execute();
+            gmail.users().messages().send(USER_EMAIL, message).execute();
+        } catch (IOException e) {
+            if (e.getMessage().contains("invalid_grant")) {
+                // Refresh the token and retry
+                credential.refreshToken();
+                Gmail gmail = getGmailService();
+
+                MimeMessage mimeMessage = createEmail(to, USER_EMAIL, subject, body);
+                Message message = createMessageWithEmail(mimeMessage);
+
+                gmail.users().messages().send(USER_EMAIL, message).execute();
+            } else {
+                throw e;
+            }
+        }
     }
 
     /**

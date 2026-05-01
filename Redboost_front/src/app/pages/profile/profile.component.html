@@ -1,0 +1,114 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card card-profile">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <div class="text-center pt-4">
+            <div class="profile-img-container">
+              <img [src]="user?.profile_pictureurl" 
+                   class="profile-img" 
+                   alt="Profile Picture">
+              <button (click)="triggerFileInput()" class="edit-btn profile-edit-btn">
+                <i class="fas fa-edit" style="color: #E44D62;"></i>
+              </button>
+            </div>
+            <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" />
+            <h3 style="color: #EA7988;">{{ user?.firstName }} {{ user?.lastName }}</h3>
+          </div>
+          
+        </div>
+
+        <!-- Main Content -->
+        <div class="card-body">
+          <!-- User Info -->
+          <div class="info mt-3">
+            <div class="info-item">
+              <span style="color: #DB1E37;">First Name:</span> 
+              <span>{{ user?.firstName || 'N/A' }}</span>
+              <button (click)="toggleEditMode('firstName')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['firstName']" class="edit-container">
+                <input type="text" [(ngModel)]="user.firstName" class="form-control">
+                <button class="btn save-btn" (click)="saveField('firstName')">Save</button>
+              </div>
+            </div>
+            <div class="info-item">
+              <span style="color: #DB1E37;">Last Name:</span> 
+              <span>{{ user?.lastName || 'N/A' }}</span>
+              <button (click)="toggleEditMode('lastName')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['lastName']" class="edit-container">
+                <input type="text" [(ngModel)]="user.lastName" class="form-control">
+                <button class="btn save-btn" (click)="saveField('lastName')">Save</button>
+              </div>
+            </div>
+            <div class="info-item">
+              <span style="color: #DB1E37;">Email:</span> 
+              <span>{{ user?.email || 'N/A' }}</span>
+              <button (click)="toggleEditMode('email')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['email']" class="edit-container">
+                <input type="email" [(ngModel)]="user.email" class="form-control">
+                <button class="btn save-btn" (click)="saveField('email')">Save</button>
+              </div>
+            </div>
+            <div class="info-item">
+              <span style="color: #DB1E37;">Phone Number:</span> 
+              <span>{{ user?.phoneNumber || 'N/A' }}</span>
+              <button (click)="toggleEditMode('phoneNumber')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['phoneNumber']" class="edit-container">
+                <input type="text" [(ngModel)]="user.phoneNumber" class="form-control">
+                <button class="btn save-btn" (click)="saveField('phoneNumber')">Save</button>
+              </div>
+            </div>
+
+            <!-- Role-specific Fields -->
+            <div *ngIf="user?.role === 'COACH'" class="info-item">
+              <span style="color: #DB1E37;">Specialization:</span> 
+              <span>{{ user?.specialization || 'N/A' }}</span>
+              <button (click)="toggleEditMode('specialization')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['specialization']" class="edit-container">
+                <input type="text" [(ngModel)]="user.specialization" class="form-control">
+                <button class="btn save-btn" (click)="saveField('specialization')">Save</button>
+              </div>
+            </div>
+            <div *ngIf="user?.role === 'COACH'" class="info-item">
+              <span style="color: #DB1E37;">Years of Experience:</span> 
+              <span>{{ user?.yearsOfExperience || 'N/A' }}</span>
+              <button (click)="toggleEditMode('yearsOfExperience')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['yearsOfExperience']" class="edit-container">
+                <input type="number" [(ngModel)]="user.yearsOfExperience" class="form-control">
+                <button class="btn save-btn" (click)="saveField('yearsOfExperience')">Save</button>
+              </div>
+            </div>
+            <div *ngIf="user?.role === 'ENTREPRENEUR'" class="info-item">
+              <span style="color: #DB1E37;">Startup:</span> 
+              <span>{{ user?.StartupName || 'N/A' }}</span>
+              <button (click)="toggleEditMode('StartupName')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['StartupName']" class="edit-container">
+                <input type="text" [(ngModel)]="user.StartupName" class="form-control">
+                <button class="btn save-btn" (click)="saveField('StartupName')">Save</button>
+              </div>
+            </div>
+            <div *ngIf="user?.role === 'ENTREPRENEUR'" class="info-item">
+              <span style="color: #DB1E37;">Industry:</span> 
+              <span>{{ user?.Industry || 'N/A' }}</span>
+              <button (click)="toggleEditMode('Industry')" class="edit-btn"><i class="fas fa-edit" style="color: #E44D62;"></i></button>
+              <div *ngIf="editMode['Industry']" class="edit-container">
+                <input type="text" [(ngModel)]="user.Industry" class="form-control">
+                <button class="btn save-btn" (click)="saveField('Industry')">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio -->
+          <p class="bio mt-3">{{ user?.bio || 'No bio available.' }}</p>
+
+          <!-- Buttons -->
+          <div class="text-center mt-3 pb-3">
+            <a href="javascript:void(0)" class="btn action-btn" style="background-color: #E44D62;">Connect</a>
+            <a href="javascript:void(0)" class="btn action-btn" style="background-color: #EA7988;">Message</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

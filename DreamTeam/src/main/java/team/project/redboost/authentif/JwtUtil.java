@@ -17,8 +17,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
+
     @Value("${jwt.secret.key}")
     private String secretKey;
+
+
+    private static final long ACCESS_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+    private static final long REFRESH_TOKEN_EXPIRATION = 30L * 24 * 60 * 60 * 1000; // 30 days
 
     // Add method to get the secret key
     public String getSecretKey() {
@@ -42,6 +47,7 @@ public class JwtUtil {
 
     // Retrieve email from JWT token
     public String extractEmail(String token) {
+
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -53,14 +59,16 @@ public class JwtUtil {
     /**
      * Generates a JWT token for email/password users (no provider or providerId).
      */
-    public String generateToken(String email, Collection<? extends GrantedAuthority> authorities) {
-        return generateToken(email, null, null, authorities); // Call the main method with null provider and providerId
+    
+    public String generateToken(String email, String userId, Collection<? extends GrantedAuthority> authorities) {
+        return generateToken(email, userId, null, null, authorities);
     }
+
 
     /**
      * Generates a JWT token for OAuth2 users (with provider and providerId).
      */
-    public String generateToken(String email, String provider, String providerId, Collection<? extends GrantedAuthority> authorities) {
+    public String generateToken(String email, String userId, String provider, String providerId, Collection<? extends GrantedAuthority> authorities) {
         // Extract the single role from authorities
         String role = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -73,8 +81,9 @@ public class JwtUtil {
         JwtBuilder builder = Jwts.builder()
                 .setSubject(email)
                 .claim("role", role) // Store the role as a single string
+                .claim("userId", userId) // Store the userId as a custom claim
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION)) // 10 hours
                 .signWith(key); // Use the Key object directly
 
         // Add provider and providerId only if they are not null
@@ -84,7 +93,8 @@ public class JwtUtil {
         if (providerId != null) {
             builder.claim("providerId", providerId);
         }
-
+        Date expirationDate = new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION);
+        System.out.println("access Token Expiration: " + expirationDate);
         return builder.compact();
     }
 
@@ -98,15 +108,22 @@ public class JwtUtil {
                 .orElseThrow(() -> new IllegalArgumentException("User must have at least one role."));
 
         Key key = Keys.hmacShaKeyFor(getSecretKey().getBytes());
-
+        Date expirationDate = new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION);
+        System.out.println(" refresh Token Expiration: " + expirationDate);
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role) // Store the role as a single string
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)) // 7 days validity
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION)) // 7 days
                 .signWith(key) // Use the Key object directly
                 .compact();
     }
+
+
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", String.class));
+    }
+
 
     // Helper method to remove the ROLE_ prefix
     private String removeRolePrefix(String authority) {
@@ -127,6 +144,14 @@ public class JwtUtil {
         return (emailFromToken.equals(email) && !isTokenExpired(token));
     }
 
+    public Boolean validateToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            return !isTokenExpired(token); // Check if the token is expired
+        } catch (Exception e) {
+            return false; // Token is invalid
+        }
+    }
     // Get the role from the token
     public Role getRoleFromToken(String token) {
         Key key = Keys.hmacShaKeyFor(getSecretKey().getBytes());

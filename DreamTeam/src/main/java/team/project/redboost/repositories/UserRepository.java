@@ -7,7 +7,6 @@ import team.project.redboost.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-
     User findByProviderId(String providerId); // Add this method
 }
 

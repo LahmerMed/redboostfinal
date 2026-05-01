@@ -1,4 +1,4 @@
-package team.project.redboost.controllers;
+/*package team.project.redboost.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,9 +15,9 @@ import team.project.redboost.entities.Entrepreneur;
 import team.project.redboost.entities.RendezVous;
 import team.project.redboost.repositories.CoachRepository;
 import team.project.redboost.repositories.EntrepreneurRepository;
+import team.project.redboost.services.CalendarService;
 import team.project.redboost.services.RendezVousService;
-import team.project.redboost.services.GoogleCalendarService;
-
+import team.project.redboost.services.EmailService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,7 @@ import java.util.Optional;
 public class RendezVousController {
 
     @Autowired
-    private GoogleCalendarService googleCalendarService;
+    private CalendarService googleCalendarService;
     @Autowired
     private RendezVousService rendezVousService;
 
@@ -38,12 +38,21 @@ public class RendezVousController {
     @Autowired
     private EntrepreneurRepository entrepreneurRepository;
 
+
+
+
+
+    @Autowired
+    private EmailService emailService;
+
     @Operation(summary = "Mettre à jour le statut d’un rendez-vous et l’intégrer à Google Calendar si accepté")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Statut mis à jour, et ajouté à Google Calendar si accepté"),
             @ApiResponse(responseCode = "404", description = "Rendez-vous non trouvé"),
             @ApiResponse(responseCode = "500", description = "Erreur lors de la mise à jour ou de l’ajout à Google Calendar")
     })
+
+
     @PatchMapping("/update-status/{id}")
     public ResponseEntity<ResponseMessage> updateRendezVousStatus(
             @PathVariable Long id,
@@ -92,6 +101,30 @@ public class RendezVousController {
         }
     }
 
+
+
+    @PostMapping("/approve/{appointmentId}")
+    public ResponseEntity<String> approveAppointment(@PathVariable Long appointmentId) {
+        // Fetch appointment details from the database
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+
+        // Send email with Google Calendar invitation
+        try {
+            emailService.sendAppointmentEmail(
+                    appointment.getUserEmail(),
+                    "Appointment with Coach",
+                    appointment.getStartDateTime(),
+                    appointment.getEndDateTime(),
+                    "Appointment details",
+                    "Virtual Meeting"
+            );
+        } catch (MessagingException | IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send email");
+        }
+
+        return ResponseEntity.ok("Appointment approved and email sent");
+    }
+}
     // Classe interne pour la réponse JSON
     public static class ResponseMessage {
         private String message;
@@ -228,4 +261,4 @@ public class RendezVousController {
         List<RendezVous> rendezVous = rendezVousService.getRendezVousByCoachId(coachId);
         return ResponseEntity.ok(rendezVous);
     }
-}
+}*/

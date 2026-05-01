@@ -1,6 +1,7 @@
 package team.project.redboost.authentif;
 
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -32,6 +35,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+
+
+
         // Récupération de l'en-tête Authorization depuis la requête
         final String authorizationHeader = request.getHeader("Authorization");
         String email = null;
@@ -41,7 +47,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7);
             email = jwtUtil.extractEmail(jwtToken);
-            logger.info("JWT Token extracted. Email: " + email); // Log the extracted email
+            String userId = jwtUtil.extractUserId(jwtToken); // Extract the userId
+
+            logger.info("JWT Token extracted. Email: " + email + ", UserId: " + userId); // Log the extracted email and userId
+        }
+
+        // 2️⃣ Check Cookies for JWT
+        if (jwtToken == null) {
+            jwtToken = getJwtFromCookies(request);
+        }
+
+        // 3️⃣ Validate Token and Authenticate User
+        if (jwtToken != null) {
+            email = jwtUtil.extractEmail(jwtToken);
         }
 
 
@@ -77,7 +95,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
+
+
         // Passage au filtre suivant dans la chaîne
         chain.doFilter(request, response);
+    }
+
+    // Extract JWT from Cookies
+    private String getJwtFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            Optional<Cookie> jwtCookie = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "jwt".equals(cookie.getName()))
+                    .findFirst();
+
+            return jwtCookie.map(Cookie::getValue).orElse(null);
+        }
+        return null;
     }
 }

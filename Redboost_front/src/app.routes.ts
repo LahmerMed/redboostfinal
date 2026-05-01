@@ -24,6 +24,7 @@ import { DetailsProjetComponent } from './app/pages/Projet/details-projet/detail
 import { Crud } from './app/pages/crud/crud';
 import { Empty } from './app/pages/empty/empty';
 import { SubFolderComponent } from './app/pages/gestion-docs/gestion-folder/sub-folder/sub-folder.component';  // Import SubFolderComponent
+import {UserProfileComponent} from './app/pages/profile/profile.component'; // Import UserProfileComponent
 export const pagesRoutes: Routes = [
     { path: 'addprojet', component: AddProjetComponent },
     { path: 'GetProjet', component: AfficheProjetComponent },
@@ -34,8 +35,10 @@ export const pagesRoutes: Routes = [
     { path: 'marketplace', component: MarketplaceComponent },
     { path: 'meeting', component: MeetingComponent },
     { path: 'meetinglist', component: MeetingListComponent },
-    { path: 'appointments/received', component: AppointmentsReceivedComponent }
-];
+    { path: 'appointments/received', component: AppointmentsReceivedComponent },
+    {path: 'profile', component: UserProfileComponent}, // Add route for UserProfileComponent
+
+]; 
 
 export const appRoutes: Routes = [
     { path: '', component: Landing },
@@ -50,6 +53,7 @@ export const appRoutes: Routes = [
             { path: 'dashboard', component: Dashboard },
             { path: 'documentation', component: Documentation },
             { path: 'gestion-docs', component: GestionDocsComponent },
+            {path: 'profile', component: UserProfileComponent}, // Add route for UserProfileComponent
             { path: 'sub-folder/:folderName/:folderMetadataId/:categoryName/:subFolderName', component: SubFolderComponent },  // Updated route
             { path: 'gestion-folder/folder-details/user-library/:folderName/:folderMetadataId', component: UserLibraryComponent }, // Corrected route
             { path: 'messagerie-reclamation', component: MessagerieReclamationComponent },

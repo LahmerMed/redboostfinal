@@ -1,47 +1,58 @@
 <div class="login-container">
-    <div class="login-card">
-      <h2>Welcome Back</h2>
-      <p>Please log in to your account</p>
-  
-      <form (ngSubmit)="onLogin()">
-        <div class="input-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            [(ngModel)]="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-  
-        <button type="submit" class="login-button">Log In</button>
-      </form>
-  
-      <div class="divider">
-        <span>OR</span>
+  <div class="login-card">
+    <h2>Welcome Back</h2>
+    <p>Please log in to your account</p>
+
+    <form (ngSubmit)="onLogin()">
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+        />
       </div>
-  
-      <button class="google-login-button" (click)="onGoogleLogin()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" />
-        Continue with Google
-      </button>
-  
-      <p class="signup-link">
-        Don't have an account? <a routerLink="/signup">Sign Up</a>
-      </p>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="login-button">Log In</button>
+    </form>
+
+    <div class="divider">
+      <span>Ou</span>
     </div>
+
+    <div class="role-selection">
+      <label for="role">Vous êtes:</label>
+      <select id="role" [(ngModel)]="selectedRole" required>
+        <option value="" disabled selected>Entrepreneur</option> <!-- Default display -->
+        <option value="ENTREPRENEUR" >Entrepreneur</option>
+
+        <option value="COACH">Coach</option>
+        <option value="INVESTOR">Investisseur</option>
+      </select>
+    </div>
+
+    <button class="google-login-button" (click)="onGoogleLogin()">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" />
+      Continue with Google
+    </button>
+
+    <p class="signup-link">
+      Don't have an account? <a routerLink="/signup">Sign Up</a>
+    </p>
   </div>
+</div>

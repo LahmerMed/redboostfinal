@@ -3,7 +3,7 @@ package team.project.redboost.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.project.redboost.entities.Reclamation;
-import team.project.redboost.entities.StatutReclamation;
+import team.project.redboost.entities.User;
 import team.project.redboost.repositories.ReclamationRepository;
 
 import java.util.List;
@@ -15,65 +15,43 @@ public class ReclamationService {
     @Autowired
     private ReclamationRepository reclamationRepository;
 
-    // Récupérer toutes les réclamations
-    public List<Reclamation> getAllReclamations() {
-        return reclamationRepository.findAll();
-    }
-
-    // Récupérer une réclamation par son ID
-    public Reclamation getReclamationById(Long id) {
-        return reclamationRepository.findById(id).orElse(null);
-    }
-
-    // Créer une nouvelle réclamation
     public Reclamation createReclamation(Reclamation reclamation) {
-        reclamation.setIdUtilisateur(1L); // ID utilisateur fixe à 1
-        if (reclamation.getReponses() != null) {
-            reclamation.getReponses().forEach(reponse -> reponse.setReclamation(reclamation));
-        }
         return reclamationRepository.save(reclamation);
     }
 
-    // Mettre à jour une réclamation
-    public Reclamation updateReclamation(Long id, Reclamation reclamationDetails) {
-        Reclamation reclamation = reclamationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Réclamation non trouvée"));
-
-        reclamation.setNom(reclamationDetails.getNom());
-        reclamation.setEmail(reclamationDetails.getEmail());
-        reclamation.setSujet(reclamationDetails.getSujet());
-        reclamation.setDescription(reclamationDetails.getDescription());
-        reclamation.setCategorie(reclamationDetails.getCategorie());
-        reclamation.setStatut(reclamationDetails.getStatut());
-        reclamation.setDate(reclamationDetails.getDate());
-
-        // Mise à jour des réponses
-        reclamation.getReponses().clear();
-        if (reclamationDetails.getReponses() != null) {
-            reclamationDetails.getReponses().forEach(reponse -> reponse.setReclamation(reclamation));
-            reclamation.getReponses().addAll(reclamationDetails.getReponses());
-        }
-
-        return reclamationRepository.save(reclamation);
+    public List<Reclamation> getAllReclamationsByUser(User user) {
+        return reclamationRepository.findByUser(user);
     }
 
-    // Supprimer une réclamation
-    public boolean deleteReclamation(Long id) {
-        if (reclamationRepository.existsById(id)) {
-            reclamationRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public Reclamation getReclamationByIdAndUser(Long idReclamation, User user) {
+        Optional<Reclamation> reclamation = reclamationRepository.findByIdReclamationAndUser(idReclamation, user);
+        return reclamation.orElse(null);
     }
-    public Reclamation updateReclamationStatut(Long idReclamation, StatutReclamation nouveauStatut) {
-        Optional<Reclamation> reclamationOpt = reclamationRepository.findById(idReclamation);
 
-        if (reclamationOpt.isPresent()) {
-            Reclamation reclamation = reclamationOpt.get();
-            reclamation.setStatut(nouveauStatut);
+
+    public Reclamation updateReclamation(Long id, Reclamation reclamationDetails, User user) {
+        Optional<Reclamation> reclamationOptional = reclamationRepository.findByIdReclamationAndUser(id, user);
+        if (reclamationOptional.isPresent()) {
+            Reclamation reclamation = reclamationOptional.get();
+            reclamation.setSujet(reclamationDetails.getSujet());
+            reclamation.setDate(reclamationDetails.getDate());
+            reclamation.setStatut(reclamationDetails.getStatut());
+            reclamation.setDescription(reclamationDetails.getDescription());
+            reclamation.setCategorie(reclamationDetails.getCategorie());
+            reclamation.setFichierReclamation(reclamationDetails.getFichierReclamation());
             return reclamationRepository.save(reclamation);
+        } else {
+            return null;
         }
+    }
 
-        return null;
+    public boolean deleteReclamation(Long id, User user) {
+        Optional<Reclamation> reclamationOptional = reclamationRepository.findByIdReclamationAndUser(id, user);
+        if (reclamationOptional.isPresent()) {
+            reclamationRepository.delete(reclamationOptional.get());
+            return true;
+        } else {
+            return false;
+        }
     }
 }

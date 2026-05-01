@@ -28,6 +28,7 @@ import { environment } from '../../../../environment';
 export class SigninComponent {
   email: string = '';
   password: string = '';
+  selectedRole: string = '';
 
   constructor(
     private authService: AuthService,
@@ -35,48 +36,61 @@ export class SigninComponent {
     private messageService: MessageService
   ) {}
 
-  onLogin() {
-    console.log('Attempting login with email:', this.email); // Debugging
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        console.log('Login successful:', response); // Debugging
-        const accessToken = response.accessToken; // Extract the accessToken from the response
-        if (accessToken) {
-          // Store the token in local storage
-          localStorage.setItem('authToken', accessToken);
-        }
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login successful' });
-        this.router.navigate(['dashboard']);
-      },
-      error: (error) => {
-        console.error('Login failed:', error); // Debugging
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Login failed' });
-      },
-    });
+ // signin.component.ts
+onLogin() {
+  console.log('Attempting login with email:', this.email);
+  this.authService.login(this.email, this.password).subscribe({
+    next: (response) => {
+      console.log('Login successful:', response);
+      const accessToken = response.accessToken;
+      const refreshToken = response.refreshToken;
+
+      if (accessToken) {
+        // Store the tokens in localStorage
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login successful' });
+      this.router.navigate(['profile']);
+    },
+    error: (error) => {
+      console.error('Login failed:', error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Login failed' });
+    },
+  });
+}
+
+  // signin.component.ts
+async onGoogleLogin() {
+  if (!this.selectedRole) {
+    alert('Please select a role before continuing.');
+    return;
   }
 
-  onGoogleLogin() {
-    console.log('Firebase initialized with config:', environment.firebaseConfig);
-    this.authService.googleLogin().subscribe({
-      next: (response) => {
-        console.log('Google login successful:', response);
-        this.router.navigate(['dashboard']);
+  console.log('Firebase initialized with config:', environment.firebaseConfig);
 
-        const token = response.token;
-        if (token) {
-          // Store the token in local storage
-          localStorage.setItem('authToken', token);
-        }
-      },
-      error: (error) => {
-        console.error('Google login failed:', error);
-      },
-    });
-  }
+  (await this.authService.googleLogin(this.selectedRole)).subscribe({
+    next: (response: any) => {
+      const accessToken = response.accessToken;
+      const refreshToken = response.refreshToken;
 
-  logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('refreshToken');
-    this.router.navigate(['landing']);
-  }
+      console.log('Google login successful:', response);
+      if (accessToken) {
+        // Store the tokens in localStorage
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Google login successful' });
+      this.router.navigate(['profile']);
+    },
+    error: (error: any) => {
+      console.error('Google login failed:', error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Google login failed' });
+    },
+  });
+}
+
+  
 }

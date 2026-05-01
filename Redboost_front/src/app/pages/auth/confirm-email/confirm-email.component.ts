@@ -45,7 +45,7 @@ export class ConfirmEmailComponent {
     this.http.post('http://localhost:8085/Auth/confirm-email', confirmationRequest).subscribe(
       () => {
         alert('Email confirmed successfully!');
-        this.router.navigate(['/signin']); // Navigate to login page after confirmation
+        this.router.navigate(['/dashboard']); // Navigate to login page after confirmation
       },
       (error) => {
         alert('Invalid confirmation code. Please try again.');

@@ -8,7 +8,7 @@ import { provideNativeDateAdapter } from '@angular/material/core'; // Import thi
 import { MessageService } from 'primeng/api'; // Import MessageService
 import { AuthInterceptor } from './app/pages/auth/AuthInterceptor'; // Import AuthInterceptor
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideAuth, getAuth, setPersistence, browserLocalPersistence } from '@angular/fire/auth';
 import { environment } from './environment';
 
 console.log('Initializing Firebase with config:', environment.firebaseConfig);
@@ -24,8 +24,17 @@ export const appConfig: ApplicationConfig = {
             withEnabledBlockingInitialNavigation()
         ),
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), // Initialize Firebase
-        provideAuth(() => getAuth()), // Initialize Firebase Auth
-        provideHttpClient(
+        provideAuth(() => {
+            const auth = getAuth(); // Get the Firebase Auth instance
+            setPersistence(auth, browserLocalPersistence) // Set persistence to local
+                .then(() => {
+                    console.log("Firebase authentication persistence set to local.");
+                })
+                .catch((error) => {
+                    console.error("Error setting Firebase persistence:", error);
+                });
+            return auth;
+        }),        provideHttpClient(
             withFetch(),
             withInterceptors([AuthInterceptor]) // Add AuthInterceptor
         ),

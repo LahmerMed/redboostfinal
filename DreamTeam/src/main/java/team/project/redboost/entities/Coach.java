@@ -1,7 +1,6 @@
 package team.project.redboost.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,8 +13,7 @@ import lombok.EqualsAndHashCode;
 public class Coach extends User {
 
     @Size(min = 2, max = 100)
-    private String specialization="Unknown";
+    private String specialization = "Unknown";
 
-
-    private Integer yearsOfExperience=0;
+    private Integer yearsOfExperience = 0;
 }

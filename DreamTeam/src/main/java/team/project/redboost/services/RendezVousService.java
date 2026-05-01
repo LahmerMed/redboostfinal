@@ -1,4 +1,4 @@
-package team.project.redboost.services;
+/*package team.project.redboost.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,4 +88,4 @@ public class RendezVousService {
         }
         rendezVousRepository.deleteById(id);
     }
-}
+}*/

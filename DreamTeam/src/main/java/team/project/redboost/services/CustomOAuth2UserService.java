@@ -28,11 +28,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerId = oauth2User.getAttribute("sub"); // LinkedIn's unique ID
 
 
-
         String email = oauth2User.getAttribute("email");
         if (email == null) {
             throw new OAuth2AuthenticationException("Email not found in OAuth2 user details");
         }
+
 
         // Check if the user already exists in your database
         User user = userRepository.findByEmail(email);

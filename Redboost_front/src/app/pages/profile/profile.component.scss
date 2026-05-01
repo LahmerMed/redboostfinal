@@ -1,0 +1,213 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+  }
+  
+  .card-profile {
+    border-radius: 15px;
+    margin: 30px 0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: white; // White card background
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    background-color: white; // White header
+    padding-bottom: 15px;
+    border-bottom: 2px solid #568086; // Medium teal border for subtle contrast
+  }
+  
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #EA7988; // Pink border
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  .card-body {
+    padding: 25px;
+    background-color: white; // White body
+  }
+  
+  .stats {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #245C67; // Dark teal for stats
+  
+    span {
+      margin: 0 10px;
+      font-weight: 500;
+    }
+  }
+  
+  .info {
+    .info-item {
+      margin: 15px 0;
+      padding: 10px;
+      background-color: #f9f9f9; // Light gray overlay for contrast
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+  
+      span:first-child {
+        font-weight: 600;
+        margin-right: 10px;
+        color: #DB1E37; // Red for labels
+      }
+  
+      span:nth-child(2) {
+        color: #0A4955; // Dark teal for values
+        flex-grow: 1;
+      }
+    }
+  }
+  
+  .edit-btn {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  
+    &:hover {
+      i {
+        color: #EA7988; // Lighter pink on hover
+      }
+    }
+  }
+  
+  .edit-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .form-control {
+    width: 70%;
+    margin-right: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #568086; // Medium teal border
+    background-color: white; // White input background
+    color: #0A4955; // Dark teal text
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  
+    &:focus {
+      outline: none;
+      border-color: #E44D62; // Bright pink on focus
+      box-shadow: 0 0 5px rgba(228, 77, 98, 0.3);
+    }
+  }
+  
+  .save-btn {
+    background-color: #DB1E37; // Red for save button
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #E44D62; // Brighter pink on hover
+    }
+  }
+  
+  .bio {
+    font-size: 16px;
+    text-align: center;
+    color: #568086; // Medium teal for bio
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f9f9f9; // Light gray overlay
+    border-radius: 8px;
+  }
+  
+  .action-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    font-weight: 500;
+    margin: 0 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .profile-img {
+      width: 120px;
+      height: 120px;
+    }
+  
+    .stats {
+      font-size: 14px;
+    }
+  
+    .info-item {
+      padding: 8px;
+    }
+  
+    .form-control {
+      width: 60%;
+    }
+  
+    .save-btn, .action-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  
+  
+  
+    .profile-img-container {
+      position: relative;
+      display: inline-block; /* Keeps it centered with text-center */
+    }
+    
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid #EA7988;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .profile-img:hover {
+      transform: scale(1.05);
+    }
+    
+    .profile-edit-btn {
+      position: absolute;
+      bottom: 10px; /* Adjust this value to move it up or down */
+      right: 10px;  /* Adjust this value to move it left or right */
+      background: white; /* Optional: adds a background to make it stand out */
+      border: 2px solid #EA7988; /* Optional: adds a border */
+      border-radius: 50%; /* Makes it circular */
+      padding: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .profile-edit-btn:hover i {
+      color: #EA7988; /* Lighter pink on hover */
+    }
+    
+    .profile-edit-btn:hover {
+      background-color: #f9f9f9; /* Optional: slight gray on hover */
+      transform: scale(1.1); /* Optional: slight zoom on hover */
+    }}

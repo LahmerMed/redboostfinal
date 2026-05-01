@@ -110,6 +110,23 @@
         </div>
       </form>
   
+
+      <div class="role-selection">
+        <label for="role">Vous êtes:</label>
+        <select id="role" [(ngModel)]="selectedRole" required>
+          <option value="" disabled selected>Entrepreneur</option>
+          <option value="ENTREPRENEUR">Entrepreneur</option>
+          <option value="COACH">Coach</option>
+          <option value="INVESTOR">Investisseur</option>
+        </select>
+      </div>
+  
+      <button class="google-login-button" (click)="onGoogleLogin()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" />
+        Continue with Google
+      </button>
+
+
       <p class="login-link">
         Already have an account? <a routerLink="/login">Log In</a>
       </p>

@@ -31,8 +31,7 @@ public class RendezVous {
 
     @Column(nullable = false, length = 500)
     private String description;
-    @Column(name = "coach_id", nullable = false)
-    private Long coachId;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -75,13 +74,8 @@ public class RendezVous {
         this.status = status;
     }
 
-    public Long getCoachId() {
-        return coachId;
-    }
 
-    public void setCoachId(Long coachId) {
-        this.coachId = coachId;
-    }
+
 
     public Long getId() {
         return id;

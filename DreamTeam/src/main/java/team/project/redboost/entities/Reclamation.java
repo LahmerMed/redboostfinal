@@ -22,20 +22,15 @@ public class Reclamation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReclamation;
 
-    private Long idUtilisateur = 1L;
 
-    @NotNull(message = "Le nom est obligatoire")
-    private String nom;
 
-    @Email
-    @NotNull(message = "L'email est obligatoire")
-    private String email;
 
     @NotNull(message = "Le sujet est obligatoire")
     private String sujet;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @Temporal(TemporalType.TIMESTAMP)
+
     @NotNull(message = "La date est obligatoire")
     private Date date;
 

@@ -3,8 +3,11 @@ package team.project.redboost.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import team.project.redboost.entities.User;
 import team.project.redboost.repositories.UserRepository;
+
+import java.io.IOException;
 
 @Service
 public class UserService { // No need to implement an interface
@@ -37,4 +40,21 @@ public class UserService { // No need to implement an interface
     public User updateUser(User user) {
         return userRepository.save(user);
     }
+
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    public void updateProfilePicture(String email, String imageUrl) {
+        // Find the user by email
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        // Update the profile picture URL
+        user.setProfilePictureUrl(imageUrl);
+        userRepository.save(user);
+    }
+
 }

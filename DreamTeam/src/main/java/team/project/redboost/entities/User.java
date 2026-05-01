@@ -27,13 +27,24 @@ public class User implements UserDetails {
     @Size(min = 2, max = 100)
     private String lastName;
 
-    @Email
-    @Column(unique = true)
+    private String profilePictureUrl; // Field to store the Cloudinary URL
+
+    @Column(nullable = false)
     private String email;
 
     private String password; // Hashed password
 
     private String phoneNumber;
+
+    public String getLinkedin() {
+        return linkedin;
+    }
+
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
+    }
+
+    private String linkedin;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -111,6 +122,13 @@ public class User implements UserDetails {
         return String.format("%06d", new Random().nextInt(999999));
     }
 
+    // Getter and Setter
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
 
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
 
 }

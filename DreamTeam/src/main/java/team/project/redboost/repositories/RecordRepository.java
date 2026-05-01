@@ -10,4 +10,5 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Optional<Record> findByMeetingId(Long meetingId);
 
     boolean existsByMeetingId(Long meetingId);
+
 }

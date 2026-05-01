@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/Auth/confirm-email", "/Auth/firebase", "/Auth/login", "/Auth/**").permitAll()
+                        .requestMatchers("/Auth/**").permitAll()
                         .requestMatchers("/api/rendezvous/add", "/api/rendezvous/all", "/api/rendezvous/accepted").permitAll()
                         .requestMatchers("/api/v1/coachlist/**").permitAll()
                         // Protected endpoints
